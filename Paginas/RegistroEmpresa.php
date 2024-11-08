@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <h2>Registro de Empresa</h2>
-    <form action="ProcesoRegistroEmpresa.php" method="POST">
+    <form action="RegistroEmpresa.php" method="POST">
         <label>Nombre de Empresa:</label><br>
         <input type="text" name="nombre" required><br>
         

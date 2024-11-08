@@ -6,7 +6,7 @@
 </head>
 <body>
     <h2>Registro de Empresa</h2>
-    <form action="../paginas/ProcesoRegistroEmpresa.php" method="POST">
+    <form action="ProcesoRegistroEmpresa.php" method="POST">
         <label>Nombre de Empresa:</label><br>
         <input type="text" name="nombre" required><br>
         

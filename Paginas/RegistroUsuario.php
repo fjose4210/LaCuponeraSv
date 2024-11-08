@@ -6,7 +6,7 @@
 </head>
 <body>
     <h2>Registro de Usuario</h2>
-    <form action="../configuracionespag/ProcesoRegistroUsuario.php" method="POST">
+    <form action="ProcesoRegistroUsuario.php" method="POST">
         <label>Usuario:</label><br>
         <input type="text" name="usuario" required><br>
 

@@ -1,3 +1,17 @@
+<?php
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $tipoCuenta = $_POST['tipo_cuenta'];
+    
+    if ($tipoCuenta === 'usuario') {
+        header('Location: ../paginas/RegistroUsuario.php');
+    } elseif ($tipoCuenta === 'empresa') {
+        header('Location: ../paginas/RegistroEmpresa.php');
+    }
+    exit;
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,7 +22,7 @@
     <h1>Registrarse en La Cuponera SV</h1>
     <p>Elige el tipo de cuenta:</p>
     
-    <form action="../configuracionespag/Registros.php" method="post">
+    <form action="Registros.php" method="post">
         <label>
             <input type="radio" name="tipo_cuenta" value="usuario" required> Soy Comprador
         </label><br>

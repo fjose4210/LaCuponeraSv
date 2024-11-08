@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <h1>Registrarse en La Cuponera SV</h1>
     <p>Elige el tipo de cuenta:</p>
     
-    <form action="Registros.php" method="post">
+    <form action="Registro.php" method="post">
         <label>
             <input type="radio" name="tipo_cuenta" value="usuario" required> Soy Comprador
         </label><br>

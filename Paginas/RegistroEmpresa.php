@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $telefono = $_POST['telefono'];
     $correo = $_POST['correo'];
     $usuario = $_POST['usuario'];
-    $contrasena = md5($_POST['contrasena']);
+    $password = md5($_POST['password']);
     $estado = 'esperando aprobación';
 
     $sql = "INSERT INTO empresas (nombre, nit, direccion, telefono, correo, usuario, contrasena, estado)
@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ':telefono' => $telefono,
         ':correo' => $correo,
         ':usuario' => $usuario,
-        ':contrasena' => $contrasena,
+        ':password' => $password,
         ':estado' => $estado
     ]);
 

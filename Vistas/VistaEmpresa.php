@@ -17,7 +17,7 @@
     <main>
         <section>
             <h2>Gestión de Ofertas</h2>
-            <a href="Cupones.php">Ver Todos los Cupones</a>     
+            <a href="Cupones.php">Ver Mis Cupones</a>     
             <form id="formularioOferta">     
         </section>
     </main>

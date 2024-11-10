@@ -38,14 +38,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $empresa = $stmtEmpresa->fetch(PDO::FETCH_ASSOC);
 
     if ($empresa && password_verify($password, $empresa['password'])) {
-        $_SESSION['usuario_id'] = $empresa['id'];
-        $_SESSION['rol'] = 'empresa';
-        $_SESSION['usuario'] = $empresa['usuario'];
-        header("Location: Vistas/VistaEmpresa.php");
-        exit;
-    }
-
-    $error = "Usuario o contraseña incorrectos";
+        if ($empresa['estado'] === 'Aprobada') {
+            $_SESSION['usuario_id'] = $empresa['id'];
+            $_SESSION['rol'] = 'empresa';
+            $_SESSION['usuario'] = $empresa['usuario'];
+            header("Location: Vistas/VistaEmpresa.php");
+            exit;
+        } elseif ($empresa['estado'] === 'Desaprobada') {
+            $error = "Su cuenta ha sido rechazada. Contacte al administrador para más información.";
+        } else { 
+            $error = "Su cuenta está pendiente de aprobación por el administrador.";
+        }
+	}
 }
 ?>
 

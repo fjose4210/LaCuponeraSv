@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $sqlEmpresa = "SELECT * FROM empresas WHERE usuario = :usuario";
+    $sqlEmpresa = "SELECT * FROM empresas WHERE usuario = :usuario AND estado = 'Aprobada'";
     $stmtEmpresa = $pdo->prepare($sqlEmpresa);
     $stmtEmpresa->execute([':usuario' => $usuario]);
     $empresa = $stmtEmpresa->fetch(PDO::FETCH_ASSOC);

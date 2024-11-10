@@ -9,11 +9,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $telefono = $_POST['telefono'];
     $correo = $_POST['correo'];
     $usuario = $_POST['usuario'];
-    $password = md5($_POST['password']);
-    $estado = 'esperando aprobación'; 
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO empresas (nombre, nit, direccion, telefono, correo, usuario, password, estado)
-            VALUES (:nombre, :nit, :direccion, :telefono, :correo, :usuario, :password, :estado)";
+    $sql = "INSERT INTO empresas (nombre, nit, direccion, telefono, correo, usuario, password)
+            VALUES (:nombre, :nit, :direccion, :telefono, :correo, :usuario, :password)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
         ':nombre' => $nombre,
@@ -22,14 +21,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         ':telefono' => $telefono,
         ':correo' => $correo,
         ':usuario' => $usuario,
-        ':password' => $password,
-        ':estado' => $estado
+        ':password' => $password
     ]);
 
     $mensaje = "Registro exitoso. Esperando aprobación del administrador.";
 }
 ?>
-
+D
 <!DOCTYPE html>
 <html lang="es">
 <head>

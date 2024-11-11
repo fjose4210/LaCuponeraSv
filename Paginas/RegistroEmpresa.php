@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $mensaje = "Registro exitoso. Esperando aprobación del administrador.";
 }
 ?>
-D
+
 <!DOCTYPE html>
 <html lang="es">
 <head>

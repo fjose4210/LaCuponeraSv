@@ -1,0 +1,170 @@
+CREATE DATABASE IF NOT EXISTS lacuponerasv DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE lacuponerasv;
+
+DELIMITER $$
+DROP PROCEDURE IF EXISTS `ComprarCupon`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `ComprarCupon` (IN `p_usuario_id` INT, IN `p_oferta_id` INT, IN `p_cantidad` INT)   BEGIN
+    DECLARE v_precio DECIMAL(10, 2);
+    DECLARE v_total DECIMAL(10, 2);
+
+    -- Verificar que no exceda el límite de 5 cupones por oferta para el usuario
+    IF (SELECT COUNT(*) FROM cupones WHERE usuario_id = p_usuario_id AND oferta_id = p_oferta_id) + p_cantidad > 5 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'El usuario ha alcanzado el límite de compra para esta oferta.';
+    END IF;
+
+    -- Obtener el precio de la oferta
+    SELECT precio_oferta INTO v_precio FROM ofertas WHERE id = p_oferta_id;
+    SET v_total = v_precio * p_cantidad;
+
+    -- Crear los cupones y sus facturas asociadas
+    WHILE p_cantidad > 0 DO
+        -- Generar el código único del cupón
+        SET @codigo_cupon = CONCAT('CP-', UUID());
+
+        -- Insertar el cupón
+        INSERT INTO cupones (oferta_id, usuario_id, codigo, fecha_compra)
+        VALUES (p_oferta_id, p_usuario_id, @codigo_cupon, CURRENT_TIMESTAMP);
+
+        -- Obtener el ID del cupón insertado
+        SET @cupon_id = LAST_INSERT_ID();
+
+        -- Crear la factura asociada al cupón
+        INSERT INTO facturas (cupon_id, monto, fecha_emision)
+        VALUES (@cupon_id, v_precio, CURRENT_TIMESTAMP);
+
+        SET p_cantidad = p_cantidad - 1;
+    END WHILE;
+END$$
+
+
+DROP TABLE IF EXISTS administradores;
+CREATE TABLE administradores (
+  id int(11) NOT NULL,
+  usuario varchar(50) NOT NULL,
+  correo varchar(100) NOT NULL,
+  password varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS cupones;
+CREATE TABLE cupones (
+  id int(11) NOT NULL,
+  oferta_id int(11) DEFAULT NULL,
+  usuario_id int(11) DEFAULT NULL,
+  codigo varchar(20) NOT NULL,
+  fecha_compra datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS empresas;
+CREATE TABLE empresas (
+  id int(11) NOT NULL,
+  nombre varchar(100) NOT NULL,
+  nit varchar(17) NOT NULL,
+  direccion varchar(255) DEFAULT NULL,
+  telefono varchar(15) DEFAULT NULL,
+  correo varchar(100) NOT NULL,
+  usuario varchar(50) NOT NULL,
+  password varchar(255) NOT NULL,
+  estado ENUM('Aprobada', 'Desaprobada', 'En espera') DEFAULT 'En espera',
+  comision float DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS facturas;
+CREATE TABLE facturas (
+  id int(11) NOT NULL,
+  cupon_id int(11) DEFAULT NULL,
+  monto decimal(10,2) DEFAULT NULL,
+  fecha_emision datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS ofertas;
+CREATE TABLE ofertas (
+  id int(11) NOT NULL,
+  empresa_id int(11) DEFAULT NULL,
+  titulo varchar(100) DEFAULT NULL,
+  precio_regular decimal(10,2) DEFAULT NULL,
+  precio_oferta decimal(10,2) DEFAULT NULL,
+  fecha_inicio date DEFAULT NULL,
+  fecha_fin date DEFAULT NULL,
+  fecha_limite date DEFAULT NULL,
+  cantidad_cupones int(11) DEFAULT NULL,
+  descripcion text DEFAULT NULL,
+  estado tinyint(1) DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+DROP TABLE IF EXISTS usuarios;
+CREATE TABLE usuarios (
+  id int(11) NOT NULL,
+  usuario varchar(50) NOT NULL,
+  correo varchar(100) NOT NULL,
+  password varchar(255) NOT NULL,
+  nombre_completo varchar(100) DEFAULT NULL,
+  apellidos varchar(100) DEFAULT NULL,
+  dui varchar(10) NOT NULL,
+  fecha_nacimiento date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+ALTER TABLE administradores
+  ADD PRIMARY KEY (id),
+  ADD UNIQUE KEY usuario (usuario),
+  ADD UNIQUE KEY correo (correo);
+
+ALTER TABLE cupones
+  ADD PRIMARY KEY (id),
+  ADD UNIQUE KEY codigo (codigo),
+  ADD KEY oferta_id (oferta_id),
+  ADD KEY usuario_id (usuario_id);
+
+ALTER TABLE empresas
+  ADD PRIMARY KEY (id),
+  ADD UNIQUE KEY nombre (nombre),
+  ADD UNIQUE KEY nit (nit),
+  ADD UNIQUE KEY correo (correo),
+  ADD UNIQUE KEY usuario (usuario);
+
+ALTER TABLE facturas
+  ADD PRIMARY KEY (id),
+  ADD KEY cupon_id (cupon_id);
+
+ALTER TABLE ofertas
+  ADD PRIMARY KEY (id),
+  ADD KEY empresa_id (empresa_id);
+
+ALTER TABLE usuarios
+  ADD PRIMARY KEY (id),
+  ADD UNIQUE KEY usuario (usuario),
+  ADD UNIQUE KEY correo (correo),
+  ADD UNIQUE KEY dui (dui);
+
+
+ALTER TABLE administradores
+  MODIFY id int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE cupones
+  MODIFY id int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE empresas
+  MODIFY id int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE facturas
+  MODIFY id int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE ofertas
+  MODIFY id int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE usuarios
+  MODIFY id int(11) NOT NULL AUTO_INCREMENT;
+
+
+ALTER TABLE cupones
+  ADD CONSTRAINT cupones_ibfk_1 FOREIGN KEY (oferta_id) REFERENCES ofertas (id),
+  ADD CONSTRAINT cupones_ibfk_2 FOREIGN KEY (usuario_id) REFERENCES usuarios (id);
+
+ALTER TABLE facturas
+  ADD CONSTRAINT facturas_ibfk_1 FOREIGN KEY (cupon_id) REFERENCES cupones (id);
+
+ALTER TABLE ofertas
+  ADD CONSTRAINT ofertas_ibfk_1 FOREIGN KEY (empresa_id) REFERENCES empresas (id);
+
+INSERT INTO administradores (usuario, correo, password) VALUES ('Admin', 'admin@gmail.com', SHA2('123', 256));

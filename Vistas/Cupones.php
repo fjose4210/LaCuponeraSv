@@ -1,58 +1,58 @@
-        <section>
-            <h2>Mis Cupones</h2>
-		    <a href="NuevoCupon.php">Agregar Cupon</a>     
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Título</th>
-                        <th>Precio Regular</th>
-                        <th>Precio Oferta</th>
-                        <th>Inicio</th>
-                        <th>Fin</th>
-                        <th>Límite Canje</th>
-                        <th>Cantidad</th>
-                        <th>Vendidos</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
+<?php
+session_start();
+include '../config.php';
 
+$empresa_id = $_SESSION['empresa_id'];
+
+try {
+    $sql = "SELECT * FROM ofertas WHERE empresa_id = :empresa_id";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['empresa_id' => $empresa_id]);
+    $cupones = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    die("Error al consultar la base de datos: " . $e->getMessage());
+}
+?>
+<section>
+    <h2>Mis Cupones</h2>
+    <a href="NuevoCupon.php">Agregar Cupón</a>
+    <?php if (empty($cupones)): ?>
+        <p>No hay cupones disponibles en este momento.</p>
+    <?php else: ?>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Precio Regular</th>
+                    <th>Precio Oferta</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    <th>Límite Canje</th>
+                    <th>Cantidad</th>
+                    <th>Vendidos</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($cupones as $cupon): ?>
                     <tr>
-                        <td>2x1 en Hamburguesas</td>
-                        <td>$15.00</td>
-                        <td>$7.50</td>
-                        <td>01/11/2024</td>
-                        <td>30/11/2024</td>
-                        <td>31/12/2024</td>
-                        <td>100</td>
-                        <td>45</td>
-                        <td>Disponible</td>
+                        <td><?php echo htmlspecialchars($cupon['titulo']); ?></td>
+                        <td>$<?php echo number_format($cupon['precio_regular'], 2); ?></td>
+                        <td>$<?php echo number_format($cupon['precio_oferta'], 2); ?></td>
+                        <td><?php echo htmlspecialchars($cupon['fecha_inicio']); ?></td>
+                        <td><?php echo htmlspecialchars($cupon['fecha_fin']); ?></td>
+                        <td><?php echo htmlspecialchars($cupon['fecha_limite']); ?></td>
+                        <td><?php echo htmlspecialchars($cupon['cantidad_cupones'] ?? 'Sin límite'); ?></td>
+                        <td><?php echo htmlspecialchars($cupon['cantidad_vendidos'] ?? 0); ?></td>
+                        <td><?php echo ($cupon['estado'] == 1) ? 'Disponible' : 'No Disponible'; ?></td>
                         <td>
-                            <button onclick="editarCupon(1)">Editar</button>
-                            <button onclick="aumentarCantidad(1)">+</button>
-                            <button onclick="disminuirCantidad(1)">-</button>
-                            <button onclick="cambiarEstado(1)">Cambiar Estado</button>
+                            <a href="EditarCupon.php?id=<?php echo $cupon['id']; ?>">Editar</a>
+                            <a href="CambiarEstado.php?id=<?php echo $cupon['id']; ?>">Cambiar Estado</a>
                         </td>
                     </tr>
-
-                    <tr>
-                        <td>50% Descuento en Postres</td>
-                        <td>$10.00</td>
-                        <td>$5.00</td>
-                        <td>15/11/2024</td>
-                        <td>15/12/2024</td>
-                        <td>31/12/2024</td>
-                        <td>Sin límite</td>
-                        <td>23</td>
-                        <td>No Disponible</td>
-                        <td>
-                            <button onclick="editarCupon(2)">Editar</button>
-                            <button onclick="aumentarCantidad(2)">+</button>
-                            <button onclick="disminuirCantidad(2)">-</button>
-                            <button onclick="cambiarEstado(2)">Cambiar Estado</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+</section>

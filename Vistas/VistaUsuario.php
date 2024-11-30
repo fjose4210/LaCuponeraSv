@@ -1,3 +1,12 @@
+<?php
+session_start();
+include '../config.php';
+
+$sql = "SELECT * FROM ofertas WHERE estado = 'disponible'";
+$stmt = $pdo->query($sql);
+$ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -48,44 +57,25 @@
 
     <div class="container">
         <h1 class="text-center mb-4">Cupones Disponibles</h1>
-        
         <div class="row">
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Pizza 2x1</h5>
-                        <p class="card-text">Precio Regular: $20.00</p>
-                        <p class="card-text">Precio Oferta: $10.00</p>
-                        <p class="card-text">Descripción: </p>
-                        <p class="card-text">Fecha Límite: 31/12/2024</p>
-                        <button class="btn btn-primary w-100">Agregar al Carrito</button>
+            <?php foreach ($ofertas as $oferta): ?>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo htmlspecialchars($oferta['titulo']); ?></h5>
+                            <p class="card-text">Precio Regular: <?php echo htmlspecialchars($oferta['precio_regular']); ?></p>
+                            <p class="card-text">Precio Oferta: <?php echo htmlspecialchars($oferta['precio_oferta']); ?></p>
+                            <p class="card-text">Descripción: <?php echo htmlspecialchars($oferta['descripcion']); ?></p>
+                            <p class="card-text">Disponible hasta: <?php echo htmlspecialchars($oferta['fecha_fin']); ?></p>
+                            <?php if (isset($_SESSION['usuario'])): ?>
+                                <a href="comprar.php?oferta_id=<?php echo $oferta['id']; ?>" class="btn btn-primary">Comprar Cupón</a>
+                            <?php else: ?>
+                                <p><a href="login.php" class="btn btn-secondary">Inicia sesión para comprar este cupón</a></p>
+                            <?php endif; ?>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Descuento en Spa</h5>
-                        <p class="card-text">Precio Regular: $50.00</p>
-                        <p class="card-text">Precio Oferta: $25.00</p>
-                        <p class="card-text">Descripción: </p>
-                        <p class="card-text">Fecha Límite: 31/12/2024</p>
-                        <button class="btn btn-primary w-100">Agregar al Carrito</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Buffet Libre</h5>
-                        <p class="card-text">Precio Regular: $30.00</p>
-                        <p class="card-text">Precio Oferta: $15.00</p>
-                        <p class="card-text">Descripción: </p>
-                        <p class="card-text">Fecha Límite: 31/12/2024</p>
-                        <button class="btn btn-primary w-100">Agregar al Carrito</button>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 

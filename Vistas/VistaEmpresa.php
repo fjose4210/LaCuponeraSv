@@ -2,6 +2,11 @@
 session_start();
 include '../config.php';
 
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../Login.php");
+    exit;
+}
+
 $sql = "SELECT * FROM ofertas";
 $stmt = $pdo->query($sql);
 $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);

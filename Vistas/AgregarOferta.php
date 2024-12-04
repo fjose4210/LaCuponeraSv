@@ -2,6 +2,10 @@
 session_start();
 include '../config.php';
 
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../Login.php");
+    exit;
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $empresa_id = $_SESSION['usuario_id'];

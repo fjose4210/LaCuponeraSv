@@ -2,7 +2,7 @@
 session_start();
 include '../config.php';
 
-$sql = "SELECT * FROM ofertas WHERE estado = 'disponible'";
+$sql = "SELECT * FROM ofertas";
 $stmt = $pdo->query($sql);
 $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -81,25 +81,36 @@ $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .actions a {
             margin-right: 10px;
         }
+        table,th,td, tr{
+            border: 1px solid black;
+        }
+        th, td{
+            padding: 5px;
+        }
+        .oferta-table{
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>Panel de Empresa - La Cuponera SV</h1>
         <nav>
+            <a href="AgregarOferta.php">Agregar Oferta</a>
             <a href="Estadisticas.php">Estadísticas</a>
-            <a href="logout.php">Cerrar Sesión</a>
+            <a href="../logout.php">Cerrar Sesión</a>
         </nav>
     </header>
 
     <main>
         <section>
             <h2>Gestión de Ofertas</h2>
-            <a href="Cupones.php">Cupones</a>
-            <?php if (empty($cupones)): ?>
-                <p>No hay cupones disponibles en este momento.</p>
+            <?php if (empty($ofertas)): ?>
+                <p>No hay ofertas disponibles en este momento.</p>
             <?php else: ?>
-                <table class="cupon-table">
+                <table class="oferta-table">
                     <thead>
                         <tr>
                             <th>Título</th>
@@ -109,25 +120,35 @@ $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <th>Fin</th>
                             <th>Límite Canje</th>
                             <th>Cantidad</th>
+                            <th>Descripción</th>
                             <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($cupones as $cupon): ?>
+                        <?php foreach ($ofertas as $oferta): ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($cupon['titulo']); ?></td>
-                                <td>$<?php echo number_format($cupon['precio_regular'], 2); ?></td>
-                                <td>$<?php echo number_format($cupon['precio_oferta'], 2); ?></td>
-                                <td><?php echo htmlspecialchars($cupon['fecha_inicio']); ?></td>
-                                <td><?php echo htmlspecialchars($cupon['fecha_fin']); ?></td>
-                                <td><?php echo htmlspecialchars($cupon['fecha_limite']); ?></td>
-                                <td><?php echo htmlspecialchars($cupon['cantidad_cupones'] ?? 'Sin límite'); ?></td>
-                                <td><?php echo ($cupon['estado'] == 1) ? 'Disponible' : 'No Disponible'; ?></td>
-                                <td class="actions">
-                                    <a href="EditarCupon.php?id=<?php echo $cupon['id']; ?>">Editar</a>
-                                    <a href="CambiarEstado.php?id=<?php echo $cupon['id']; ?>">Cambiar Estado</a>
-                                </td>
+                                <form class="edit-form" method="POST" action="ActualizarOferta.php">
+                                    <td><input type="text" name="titulo" value="<?php echo htmlspecialchars($oferta['titulo']); ?>"></td>
+                                    <td><input type="number" name="precio_regular" step="0.01" value="<?php echo htmlspecialchars($oferta['precio_regular']); ?>"></td>
+                                    <td><input type="number" name="precio_oferta" step="0.01" value="<?php echo htmlspecialchars($oferta['precio_oferta']); ?>"></td>
+                                    <td><input type="date" name="fecha_inicio" value="<?php echo htmlspecialchars($oferta['fecha_inicio']); ?>"></td>
+                                    <td><input type="date" name="fecha_fin" value="<?php echo htmlspecialchars($oferta['fecha_fin']); ?>"></td>
+                                    <td><input type="date" name="fecha_limite" value="<?php echo htmlspecialchars($oferta['fecha_limite']); ?>"></td>
+                                    <td><input type="number" name="cantidad_cupones" value="<?php echo htmlspecialchars($oferta['cantidad_cupones'] ?? ''); ?>" 
+                                    placeholder="Sin límite"></td>
+                                    <td><input type="text" name="descripcion" value="<?php echo htmlspecialchars($oferta['descripcion']); ?>"></td>
+                                    <td>
+                                        <select name="estado">
+                                            <option value="Disponible" <?php echo $oferta['estado'] === 'Disponible' ? 'selected' : ''; ?>>Disponible</option>
+                                            <option value="No disponible" <?php echo $oferta['estado'] === 'No disponible' ? 'selected' : ''; ?>>No disponible</option>
+                                        </select>
+                                    </td>
+                                    <td class="actions">
+                                        <input type="hidden" name="id" value="<?php echo $oferta['id']; ?>">
+                                        <button type="submit">Guardar</button>
+                                    </td>
+                                </form>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
@@ -135,7 +156,6 @@ $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endif; ?>
         </section>
     </main>
-
     <footer>
         <p>La Cuponera SV - Panel de Empresa - 2024</p>
     </footer>

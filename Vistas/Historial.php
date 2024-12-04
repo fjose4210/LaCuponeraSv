@@ -48,6 +48,63 @@ $resumen = $resumen_stmt->fetch(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historial de Compras - La Cuponera SV</title>
+    <style>
+        table,th,td, tr{
+            border: 1px solid black;
+        }
+        table{
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        th, td{
+            padding: 5px;
+        }
+        main {
+            padding: 20px;
+        }
+        section {
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        a {
+            color: #f9f9f9;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <header>

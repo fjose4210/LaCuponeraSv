@@ -38,6 +38,15 @@ $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
         .nav-link {
             color: #555;
         }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
     </style>
 </head>
 <body>

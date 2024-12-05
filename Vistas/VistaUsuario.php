@@ -7,7 +7,7 @@ if (!isset($_SESSION['usuario_id'])) {
     exit;
 }
 
-$sql = "SELECT * FROM ofertas WHERE estado = 'disponible'";
+$sql = "SELECT * FROM ofertas WHERE estado = 'disponible' AND fecha_fin >= Current_Date";
 $stmt = $pdo->query($sql);
 $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>

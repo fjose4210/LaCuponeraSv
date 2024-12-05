@@ -2,7 +2,7 @@
 session_start();
 include 'config.php';
 
-$sql = "SELECT * FROM ofertas WHERE estado = 'disponible'";
+$sql = "SELECT * FROM ofertas WHERE estado = 'disponible' AND fecha_fin >= Current_Date";
 $stmt = $pdo->query($sql);
 $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>

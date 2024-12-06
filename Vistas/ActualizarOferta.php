@@ -15,7 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fecha_inicio = $_POST['fecha_inicio'];
     $fecha_fin = $_POST['fecha_fin'];
     $fecha_limite = $_POST['fecha_limite'];
-    $cantidad_cupones = !empty($_POST['cantidad_cupones']) ? $_POST['cantidad_cupones'] : null; 
+    $cantidad_cupones = !empty($_POST['cantidad_cupones']) ? $_POST['cantidad_cupones'] : null;
+    $descripcion = $_POST['descripcion'];
+    $estado = $_POST['estado'];
 
     try {
         $sql = "UPDATE ofertas SET
@@ -26,7 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     fecha_inicio = :fecha_inicio,
                     fecha_fin = :fecha_fin,
                     fecha_limite = :fecha_limite,
-                    cantidad_cupones = :cantidad_cupones
+                    cantidad_cupones = :cantidad_cupones,
+                    descripcion = :descripcion,
+                    estado = :estado
                 WHERE id = :id";
 
         $stmt = $pdo->prepare($sql);
@@ -38,6 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':fecha_fin', $fecha_fin);
         $stmt->bindParam(':fecha_limite', $fecha_limite);
         $stmt->bindParam(':cantidad_cupones', $cantidad_cupones, PDO::PARAM_INT);
+        $stmt->bindParam(':descripcion', $descripcion);
+        $stmt->bindParam(':estado', $estado);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
 
         if ($stmt->execute()) {

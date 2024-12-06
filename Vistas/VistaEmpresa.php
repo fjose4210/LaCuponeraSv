@@ -6,8 +6,9 @@ if (!isset($_SESSION['usuario_id'])) {
     header("Location: ../Login.php");
     exit;
 }
+$usuario_id = $_SESSION['usuario_id'];
 
-$sql = "SELECT * FROM ofertas";
+$sql = "SELECT * FROM ofertas where empresa_id = $usuario_id";
 $stmt = $pdo->query($sql);
 $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>

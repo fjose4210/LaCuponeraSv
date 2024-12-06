@@ -4,7 +4,7 @@ session_start();
 
 
 if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
-    header("Location: ../login.php");
+    header("Location: ../Login.php");
     exit;
 }
 
@@ -13,7 +13,7 @@ $stmt = $pdo->query($sql);
 $empresasPendientes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
-    header("Location: ../login.php");
+    header("Location: ../Login.php");
     exit;
 }
 
@@ -46,9 +46,86 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Empresas Pendientes de Aprobación - La Cuponera SV</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f0f0f0;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+        .navbar {
+            margin-bottom: 20px;
+        }
+        .navbar-brand {
+            font-weight: bold;
+        }
+        .nav-link {
+            color: #555;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        table,th,td, tr{
+            border: 1px solid black;
+        }
+        th, td{
+            padding: 5px;
+        }
+        main {
+            padding: 20px;
+        }
+        section {
+            margin-top: 20px;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        table{
+            text-align: center;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+        .col-md-6{
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
 </head>
 <body class="bg-light">
-    <div class="container mt-4">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">La Cuponera SV</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="VistaAdmin.php">Panel de Administración</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../logout.php">Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <section class="container mt-4">
         <h1 class="mb-4">Empresas Pendientes de Aprobación</h1>
         
         <?php if (empty($empresasPendientes)): ?>
@@ -74,9 +151,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <input type="hidden" name="estado" value="Aprobada"> <!-- Campo para estado -->
                                     <div class="input-group mb-3">
                                         <label class="input-group-text">Comisión (%)</label>
-                                        <input type="number" name="comision" class="form-control" min="0" max="100" step="0.01" required>
-                                        <button type="submit" class="btn btn-success">Aprobar</button>
+                                        <input type="number" name="comision" class="form-control" min="0" max="100" step="0.01" required>                                        
                                     </div>
+                                    <button type="submit" class="btn btn-success w-100">Aprobar</button>
                                 </form>
 
                                 <form action="Pendientes.php" method="POST">
@@ -92,8 +169,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-        
-        <a href="VistaAdmin.php" class="btn btn-primary mt-3">Volver al Panel de Administración</a>
-    </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <footer class="text-center mt-5">
+        <p>La Cuponera SV - 2024</p>
+    </footer>
 </body>
 </html>

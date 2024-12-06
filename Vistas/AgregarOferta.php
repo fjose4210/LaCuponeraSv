@@ -16,11 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fecha_fin = $_POST['fecha_fin'];
     $fecha_limite = $_POST['fecha_limite'];
     $cantidad_cupones = isset($_POST['cantidad_cupones']) && $_POST['cantidad_cupones'] !== '' ? $_POST['cantidad_cupones'] : null;
+    $descripcion = $_POST['descripcion'];
+    $estado = $_POST['estado'];
 
     try {
         $sql = "INSERT INTO ofertas 
-                (empresa_id, titulo, precio_regular, precio_oferta, fecha_inicio, fecha_fin, fecha_limite, cantidad_cupones, descripcion)
-                VALUES (:empresa_id, :titulo, :precio_regular, :precio_oferta, :fecha_inicio, :fecha_fin, :fecha_limite, :cantidad_cupones, :descripcion)";
+                (empresa_id, titulo, precio_regular, precio_oferta, fecha_inicio, fecha_fin, fecha_limite, cantidad_cupones, descripcion, estado)
+                VALUES (:empresa_id, :titulo, :precio_regular, :precio_oferta, :fecha_inicio, :fecha_fin, :fecha_limite, :cantidad_cupones, :descripcion, :estado)";
 
         $stmt = $pdo->prepare($sql);
         $stmt->bindParam(':empresa_id', $empresa_id, PDO::PARAM_INT);
@@ -31,7 +33,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':fecha_fin', $fecha_fin);
         $stmt->bindParam(':fecha_limite', $fecha_limite);
         $stmt->bindParam(':cantidad_cupones', $cantidad_cupones, PDO::PARAM_INT);
-        $stmt->bindParam(':descripcion', $_POST['descripcion']);
+        $stmt->bindParam(':descripcion', $descripcion);
+        $stmt->bindParam(':estado', $estado);
 
         if ($stmt->execute()) {
             $message = "Oferta agregada exitosamente.";
@@ -97,12 +100,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-right: auto;
             text-align: center;
         }
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
 
     </style>
 </head>
 <body>
 <header>
     <h1>Panel de Empresa - La Cuponera SV</h1>
+    <nav>
+        <a href="VistaEmpresa.php">Gestión de Ofertas</a>
+        <a href="Estadisticas.php">Estadísticas</a>
+        <a href="../logout.php">Cerrar Sesión</a>
+    </nav>
 </header>
     <main>
         <section>
@@ -121,6 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <th>Límite Canje</th>
                     <th>Cantidad</th>
                     <th>Descripción</th>
+                    <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -135,6 +152,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <td><input type="date" id="fecha_limite" name="fecha_limite" required></td>
                     <td><input type="number" id="cantidad_cupones" name="cantidad_cupones" placeholder="Sin límite"></td>
                     <td><textarea id="descripcion" name="descripcion"></textarea></td>
+                    <td>
+                        <select name="estado">
+                            <option value="Disponible">Disponible</option>
+                            <option value="No disponible">No disponible</option>
+                        </select>
+                    </td>
                     <td><button type="submit">Agregar</button></td>
                 </tr>
             </tbody>

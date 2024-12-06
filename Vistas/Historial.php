@@ -104,6 +104,12 @@ $resumen = $resumen_stmt->fetch(PDO::FETCH_ASSOC);
         a:hover {
             text-decoration: underline;
         }
+        button{
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -118,14 +124,6 @@ $resumen = $resumen_stmt->fetch(PDO::FETCH_ASSOC);
     <main>
         <h2>Historial de Compras</h2>
         <section>
-            <div>
-                <label for="fecha-inicio">Desde:</label>
-                <input type="date" id="fecha-inicio" name="fecha-inicio">
-                <label for="fecha-fin">Hasta:</label>
-                <input type="date" id="fecha-fin" name="fecha-fin">
-                <button>Filtrar</button>
-            </div>
-
             <table border="1">
                 <thead>
                     <tr>
@@ -136,6 +134,7 @@ $resumen = $resumen_stmt->fetch(PDO::FETCH_ASSOC);
                         <th>Total</th>
                         <th>Estado</th>
                         <th>Código</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -149,11 +148,17 @@ $resumen = $resumen_stmt->fetch(PDO::FETCH_ASSOC);
                                 <td>$<?php echo number_format($compra['total'], 2); ?></td>
                                 <td><?php echo htmlspecialchars($compra['estado']); ?></td>
                                 <td><?php echo htmlspecialchars($compra['codigo']); ?></td>
+                                <td>
+                                    <form action="factura.php" method="GET" style="display: inline;">
+                                        <input type="hidden" name="codigo" value="<?php echo htmlspecialchars($compra['codigo']); ?>">
+                                        <button type="submit">Ver factura</button>
+                                    </form>
+                                </td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="7">No se encontraron compras en el historial.</td>
+                            <td colspan="8">No se encontraron compras en el historial.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

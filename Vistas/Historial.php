@@ -16,7 +16,7 @@ $sql = "
         COUNT(c.id) AS cantidad, 
         o.precio_oferta AS precio_unitario, 
         COUNT(c.id) * o.precio_oferta AS total, 
-        IF(c.fecha_compra < o.fecha_limite, 'Canjeado', 'Expirado') AS estado, 
+        c.estado, 
         c.codigo 
     FROM cupones c
     INNER JOIN ofertas o ON c.oferta_id = o.id

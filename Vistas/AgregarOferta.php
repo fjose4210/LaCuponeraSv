@@ -89,17 +89,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         main {
             padding: 20px;
         }
-        table,th,td, tr{
-            border: 1px solid black;
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed; 
         }
-        th, td{
+        th, td {
             padding: 5px;
-        }
-        table{
-            margin-left: auto;
-            margin-right: auto;
             text-align: center;
+            word-wrap: break-word; 
         }
+		textarea, input, select {
+			width: 95%; 
+			box-sizing: border-box; 
+		}
+		section {
+		max-width: 95%; 
+		margin: 0 auto; 
+		overflow-x: auto; 
+		}
         nav a {
             color: white;
             text-decoration: none;
@@ -116,7 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1>Panel de Empresa - La Cuponera SV</h1>
     <nav>
         <a href="VistaEmpresa.php">Gestión de Ofertas</a>
-        <a href="Estadisticas.php">Estadísticas</a>
         <a href="../logout.php">Cerrar Sesión</a>
     </nav>
 </header>

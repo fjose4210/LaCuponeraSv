@@ -15,7 +15,8 @@ $sql = "
         o.titulo, 
         o.precio_oferta, 
         c.cantidad, 
-        (o.precio_oferta * c.cantidad) AS total
+        (o.precio_oferta * c.cantidad) AS total,
+        o.cantidad_cupones
     FROM carrito c
     INNER JOIN ofertas o ON c.oferta_id = o.id
     WHERE c.usuario_id = :usuario_id
@@ -112,18 +113,18 @@ $carrito = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($carrito as $item): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($item['titulo']); ?></td>
-                    <td>$<?php echo number_format($item['precio_oferta'], 2); ?></td>
-                    <td><?php echo htmlspecialchars($item['cantidad']); ?></td>
-                    <td>$<?php echo number_format($item['total'], 2); ?></td>
-                    <td>
-                        <a href="eliminar.php?carrito_id=<?php echo $item['carrito_id']; ?>">Eliminar</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
+    <?php foreach ($carrito as $item): ?>
+                <td><?php echo htmlspecialchars($item['titulo']); ?></td>
+                <td>$<?php echo number_format($item['precio_oferta'], 2); ?></td>
+                <td><?php echo htmlspecialchars($item['cantidad']); ?></td>
+                <td>$<?php echo number_format($item['total'], 2); ?></td>
+                <td>
+                    <a href="eliminar.php?carrito_id=<?php echo $item['carrito_id']; ?>">Eliminar</a>
+                </td>
+            </tr>
+    <?php endforeach; ?>
+</tbody>
+
     </table>
 
 <form action="finalizar.php" method="POST">

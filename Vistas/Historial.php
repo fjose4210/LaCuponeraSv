@@ -90,7 +90,7 @@ $resumen = $resumen_stmt->fetch(PDO::FETCH_ASSOC);
         }
         footer {
             text-align: center;
-            padding: 10px;
+            padding: 5px;
             background-color: #007bff;
             color: white;
             position: fixed;

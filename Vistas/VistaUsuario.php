@@ -22,6 +22,7 @@ $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <style>
         body {
             background-color: #f0f0f0;
+            margin-bottom: 60px;
         }
         .container {
             margin-top: 50px;
@@ -40,7 +41,7 @@ $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
         footer {
             text-align: center;
-            padding: 10px;
+            padding: 5px;
             background-color: #007bff;
             color: white;
             position: fixed;

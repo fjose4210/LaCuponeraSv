@@ -1,12 +1,18 @@
 <?php
-// Conexión a la base de datos
+session_start();
 require '../config.php';
 
 if (!isset($_GET['codigo'])) {
     die('Código no proporcionado.');
 }
 
+if (!isset($_SESSION['usuario_id'])) {
+    header("Location: ../Login.php");
+    exit;
+}
+
 $codigo = $_GET['codigo'];
+$usuario_id = $_SESSION['usuario_id'];
 
 $query = $pdo->prepare("
     SELECT 
@@ -30,6 +36,12 @@ $factura = $query->fetch(PDO::FETCH_ASSOC);
 if (!$factura) {
     die('Factura no encontrada.');
 }
+
+$sql_usuario = "SELECT nombre_completo, apellidos, dui, correo FROM usuarios Where id = $usuario_id";
+$usuario_stmt = $pdo->prepare($sql_usuario);
+$usuario_stmt->execute();
+$usuario = $usuario_stmt->fetch(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>
@@ -133,8 +145,9 @@ if (!$factura) {
 
         <div class="info">
             <h3>Datos del Cliente</h3>
-            <p><strong>Nombre:</strong> <?php echo htmlspecialchars($cliente['nombre']); ?></p>
-            <p><strong>Email:</strong> <?php echo htmlspecialchars($cliente['correo']); ?></p>
+            <p><strong>Nombre:</strong> <?php echo htmlspecialchars($usuario['nombre_completo']); ?></p>
+            <p><strong>DUI:</strong> <?php echo htmlspecialchars($usuario['dui']); ?></p>
+            <p><strong>Email:</strong> <?php echo htmlspecialchars($usuario['correo']); ?></p>
         </div>
 
         <table>

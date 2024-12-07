@@ -105,7 +105,6 @@ $ofertas = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <h1>Panel de Empresa - La Cuponera SV</h1>
         <nav>
             <a href="AgregarOferta.php">Agregar Oferta</a>
-            <a href="Estadisticas.php">Estadísticas</a>
             <a href="../logout.php">Cerrar Sesión</a>
         </nav>
     </header>

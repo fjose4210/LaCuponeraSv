@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html>
 <head>
     <title>Agregar Oferta</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -92,12 +93,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         table {
             width: 100%;
             border-collapse: collapse;
-            table-layout: fixed; 
+            table-layout: fixed;
+            border: 1px solid black; 
         }
-        th, td {
+        th, td, tr {
             padding: 5px;
             text-align: center;
             word-wrap: break-word; 
+            border: 1px solid black;
         }
 		textarea, input, select {
 			width: 95%; 
@@ -116,8 +119,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         nav a:hover {
             text-decoration: underline;
         }
-
     </style>
+
 </head>
 <body>
 <header>
@@ -175,5 +178,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <footer>
         <p>La Cuponera SV - Panel de Empresa - 2024</p>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

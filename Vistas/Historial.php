@@ -40,8 +40,8 @@ $resumen_sql = "
 $resumen_stmt = $pdo->prepare($resumen_sql);
 $resumen_stmt->execute(['usuario_id' => $usuario_id]);
 $resumen = $resumen_stmt->fetch(PDO::FETCH_ASSOC);
-
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -100,6 +100,7 @@ $resumen = $resumen_stmt->fetch(PDO::FETCH_ASSOC);
         a {
             color: #f9f9f9;
             text-decoration: none;
+            margin-left: 5px;
         }
         a:hover {
             text-decoration: underline;

@@ -19,7 +19,7 @@ if (!isset($_SESSION['rol']) || $_SESSION['rol'] !== 'admin') {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $empresa_id = $_POST['empresa_id'];
-    $comision = $_POST['comision'];
+    $comision = $_POST['comision']/100;
     $estado = $_POST['estado']; // Estado puede ser 'Aprobada' o 'Desaprobada'
 
     try {
